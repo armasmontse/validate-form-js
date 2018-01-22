@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script type='text/javascript' src='jquery.min.js'></script>
+    </head>
+	
+	<!-- Styles -->
+	<style>
+		#contact label{
+			display: inline-block;
+			width: 100px;
+			text-align: right;
+		}
+		#contact_submit{
+			padding-left: 100px;
+		}
+		#contact div{
+			margin-top: 1em;
+		}
+		textarea{
+			vertical-align: top;
+			height: 5em;
+		}
+			
+		.error{
+			display: none;
+			margin-left: 10px;
+		}		
+		
+		.error_show{
+			color: red;
+			margin-left: 10px;
+		}
+		
+		input.invalid, textarea.invalid{
+			border: 2px solid red;
+		}
+		
+		input.valid, textarea.valid{
+			border: 2px solid green;
+		}
+	</style>
+	
+	<!-- JavaScript Code -->
+	<script>
+		$(document).ready(function() {
+			<!-- Real-time Validation -->
+				<!--Name cant be blank-->
+				$('#contact_name').on('input', function() {
+					var input=$(this);
+					var is_name=input.val();
+					if(is_name){input.removeClass("invalid").addClass("valid");}
+					else{input.removeClass("valid").addClass("invalid");}
+				});
+
+				<!--Lastname cant be blank-->
+				$('#contact_lastname').on('input', function() {
+					var input=$(this);
+					var is_name=input.val();
+					if(is_name){input.removeClass("invalid").addClass("valid");}
+					else{input.removeClass("valid").addClass("invalid");}
+				});
+
+				<!--Telephone cant be blank or text -->
+				$('#contact_telephone').on('input', function() {
+					var input=$(this);
+					var re = /^\d{10}$/; 
+					var is_telephone = re.test(input.val());
+					if(is_telephone){input.removeClass("invalid").addClass("valid");}
+					else{input.removeClass("valid").addClass("invalid");}
+				});
+				
+				<!--Email must be an email -->
+				$('#contact_email').on('input', function() {
+					var input=$(this);
+					var re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+					var is_email=re.test(input.val());
+					if(is_email){input.removeClass("invalid").addClass("valid");}
+					else{input.removeClass("valid").addClass("invalid");}
+				});
+				
+		
+			<!-- After Form Submitted Validation-->
+			$("#contact_submit input").click(function(event){
+				var form_data=$("#contact").serializeArray();
+				var error_free=true;
+				for (var input in form_data){
+					var element=$("#contact_"+form_data[input]['name']);
+					var valid=element.hasClass("valid");
+					var error_element=$("span", element.parent());
+					if (!valid){error_element.removeClass("error").addClass("error_show"); error_free=false;}
+					else{error_element.removeClass("error_show").addClass("error");}
+				}
+				if (!error_free){
+					event.preventDefault(); 
+				}
+				else{
+					alert('No errors: Form will be submitted');
+				}
+			});
+			
+			
+			
+		});
+	</script>
+	
+    <body>
+
+		<form class="flex-container" id="contact" method="post" action="">
+			<!-- Name -->
+			<div>
+				<input type="text" id="contact_name" name="name" placeholder="Nombre">
+				<span class="error">This field is required</span>
+			</div>
+
+			<!-- Lastname -->
+			<div>
+				<input type="text" id="contact_lastname" name="lastname" placeholder="Apellido">
+				<span class="error">This field is required</span>
+			</div>
+
+			<!-- Telephone -->
+			<div>
+				<input type="tel" id="contact_telephone" name="telephone" placeholder="Teléfono (10 números)" max="10" required >
+				<span class="error">This field is required in format correct</span>
+			</div>
+
+			<!-- Email -->
+			<div>
+				<input type="email" id="contact_email" name="email" placeholder="Correo electrónico">
+				<span class="error">A valid email address is required</span>				
+			</div>				
+			
+			<!-- Submit Button -->
+			<div id="contact_submit" class="buttonSend">
+				<input class="buttonSend--white" type="submit" value="ENVIAR">
+		  	</div>
+		</form>
+			
+	</body>
+</html>
+
+      
+    
+
